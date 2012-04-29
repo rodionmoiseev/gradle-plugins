@@ -23,7 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 
 group = 'org.rodion.gradle'
-version = '0.1-SNAPSHOT'
+version = '0.1'
 archivesBaseName = 'idea-scala-plugin'
 
 sourceCompatibility = '1.6'
@@ -48,7 +48,7 @@ idea.project.ipr{
     //Setup Git root
     def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
     mapping.@vcs = 'Git'
-    mapping.@directory = '$PROJECT_DIR$'
+    mapping.@directory = '$PROJECT_DIR$/..'
 
     //Make sure IDEA sticks Apache 2.0 preamble for each file
     def comp = provider.node.component.find { it.@name == 'CopyrightManager' }
