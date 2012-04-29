@@ -19,11 +19,11 @@ To apply the plugin in your project add this to your `build.gradle`.
 buildscript {
   repositories{
     maven{
-      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/snapshots"
+      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/releases"
     }
   }
   dependencies {
-    classpath group: 'org.rodion.gradle', name: 'idea-scala-plugin', version: '0.1-SNAPSHOT'
+    classpath group: 'org.rodion.gradle', name: 'idea-scala-plugin', version: '0.1'
   }
 }
 
