@@ -59,7 +59,7 @@ $ gradle idea
 ## Configuration
 
 Scala Facet settings can be optionally customised. 
-The configuration is based on the parameters of the Scala compiler in the IntelliJ IDEA itself.
+The configuration is designed to resemble the structure of Scala compiler settings GUI in the IntelliJ IDEA.
 
 Plugin is configured using the `ideaScala{ ... }` closure somewhere in your `build.gradle`.
 Below is the list of all possible configurations:
@@ -71,7 +71,7 @@ ideaScala{
   scalaCompilerLibName = 'my-scala-compiler-lib'
  
   //IntelliJ library name for Scala API libraries
-  // default: 'gradle-scala-library-<scala-version>'
+  // default: 'gradle-scala-library-<scalaVersion>'
   scalaLibraryLibName = 'my-scala-library-lib'
 
   //Enable/disable IntelliJ type-aware syntax highlighting option
