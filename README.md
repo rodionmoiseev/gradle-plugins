@@ -68,69 +68,84 @@ Below is the list of all possible configurations:
 ideaScala{
   //IntelliJ library name for Scala compiler
   // default: 'gradle-scala-compiler-<scalaVersion>'
+  // defined in: project and module
   scalaCompilerLibName = 'my-scala-compiler-lib'
  
   //IntelliJ library name for Scala API libraries
   // default: 'gradle-scala-library-<scala-version>'
+  // defined in: project and module
   scalaLibraryLibName = 'my-scala-library-lib'
 
   //Enable/disable IntelliJ type-aware syntax highlighting option
   // default: true
+  // defined in: project
   typeAwareHighlighting = false
 
   compiler {
     //Set Scala compiler maximum heap size (MB)
-  	// default: 512
+    // default: 512
+    // defined in: module
     maxHeapSize = 1024
     
     //Set Scala compiler VM options
     // default: '-Xss1m -server'
+    // defined in: module
     vmParameters = '-Xss1m -server'
 
     //Set join compilation order.
     // false: javac, scalac
     // true: scalac, javac
     // default: true
+    // defined in: project
     scalacBefore = false
 
-   	fsc {
-   		//Enable Fast Scala Compiler
+    fsc {
+      //Enable Fast Scala Compiler
+      // default: false
+      // defined in: module
+      enable = true
+
+      //Set FSC maximum heap size (MB)
+      // default: 512
+      // defined in: project
+      maxHeapSize = 1024
+
+      //Set FSC VM options
+      // default: '-Xms128m -Xss1m -server'
+      // defined in: project
+      vmParameters = '-Xms128m -Xss1m -server'
+
+      //Set FSC idle timeout (minutes). 0 for no timeout.
+      // default: 0
+      // defined in: project
+      idleTimeout = 1
+
+      //Set FSC server options
+      // default: ''
+      // defined in: project
+      serverOptions = ''
+
+      server {
+        //Enable connecting to external FSC server
         // default: false
+        // defined in: project
         enable = true
 
-        //Set FSC maximum heap size (MB)
-        // default: 512
-        maxHeapSize = 1024
-
-        //Set FSC VM options
-        // default: '-Xms128m -Xss1m -server'
-        vmParameters = '-Xms128m -Xss1m -server'
-
-        //Set FSC idle timeout (minutes). 0 for no timeout.
-        // default: 0
-        idleTimeout = 1
-
-        //Set FSC server options
+        //External server's host name
         // default: ''
-        serverOptions = ''
+        // defined in: project
+        host = 'localhost'
 
-        server {
-            //Enable connecting to external FSC server
-            // default: false
-            enable = true
+        //External server's port number
+        // default: -1 (unset)
+        // defined in: project
+        port = 32834
 
-            //External server's host name
-            // default: ''
-            host = 'localhost'
-
-            //External server's port number
-            // default: -1 (unset)
-            port = 32834
-
-            //Path to shared directory
-            // default: ''
-            sharedDirectory = '/home/user/fsc/shared'
-        }
+        //Path to shared directory
+        // default: ''
+        // defined in: project
+        sharedDirectory = '/home/user/fsc/shared'
+      }
     }
   }
 }
