@@ -20,22 +20,14 @@
 
 package org.rodion.gradle
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.api.plugins.scala.ScalaPlugin
+import org.gradle.api.GradleException
 
 /**
- * A convenience plugin for single module projects
+ *
  * @author rodion
  */
-class IdeaScalaPlugin implements Plugin<Project> {
-
-    @Override
-    void apply(Project project) {
-        //Scala plugin needs to be initialised before idea-scala-project plugin
-        //otherwise will fail when trying to register 'scalaTools' configuration
-        project.plugins.apply(ScalaPlugin.class)
-        project.plugins.apply(IdeaScalaFacetPlugin.class)
-        project.plugins.apply(IdeaScalaProjectPlugin.class)
+class IdeaScalaPluginException extends GradleException {
+    IdeaScalaPluginException(String message) {
+        super(message)
     }
 }
