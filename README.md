@@ -132,6 +132,7 @@ ideaScala{
             sharedDirectory = '/home/user/fsc/shared'
         }
     }
+  }
 }
 ```
 
