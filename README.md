@@ -12,6 +12,7 @@ to work with your Scala project right away!
 ## Installing
 
 Below is the minimum configuration required to setup the `idea-scala` plugin.
+If you have multi-project setup, please refer to [this section](#multi-project-setup)
 
 To apply the plugin in your project add this to your `build.gradle`.
 
@@ -168,6 +169,93 @@ the `scalaTools` configuration.
 
 The `scalaApi` configuration is automatically declared by the plugin. The default
 `compile` configuration is also set up to extends from `scalaApi` configuration.
+
+
+## Multi Project Setup
+
+*Since ver 0.2*
+
+In IntelliJ you can choose which modules will have the Scala-facet applied.
+This means that there are some module specific configurations as well as global project
+configuration.
+
+Global projet configuration has to be defined in `build.gradle` of the parent (or master) project,
+and Scala-facet configuration has to be in `build.gradle` for each of the modules.
+
+To make this possible, the plugin consists of two separate plugins (well, actually three):
+
+* `idea-scala-project` - Should be applied in the root project to create global project configuration
+* `idea-scala-facet`   - Should be applied in each Scala-enabled module to configure the Scala-facet
+* `idea-scala`         - A convenience plugin which simply combines the two above. Should only be used for single module projects.
+
+Please use the following `build.gradle` templates as a reference on how to set up your multi-project environment:
+
+* Root project (master) configuration
+
+```groovy
+buildscript {
+  repositories{
+    maven{
+      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/releases"
+    }
+  }
+  dependencies {
+    classpath group: 'org.rodion.gradle', name: 'idea-scala-plugin', version: '0.2'
+  }
+}
+
+// 'idea-scala-project' plugin includes the 'idea' plugin
+apply plugin: 'idea-scala-project'
+
+repositories{
+  mavenCentral()
+}
+
+
+dependencies{
+  // 'scalaApi' configuration is automatically added by the plugin
+  // All libraries in this configuration will be part of the 'scala-library'
+  // library in IntelliJ, a project-level library used by the Scala-facet.
+  // The library will be referenced by all Scala-facet modules.
+  scalaApi 'org.scala-lang:scala-library:2.9.1'
+
+  // 'scalaTools' configuration is automatically added by the plugin
+  // All libraries in this configuration will be part of the 'scala-compiler'
+  // library in IntelliJ, a project-level library used by the Scala compiler.
+  scalaTools 'org.scala-lang:scala-library:2.9.1'
+  scalaTools 'org.scala-lang:scala-compiler:2.9.1'
+}
+```
+
+* Scala-enabled module configuration
+
+```groovy
+// 'idea-scala-facet' plugin includes both, 'idea' and 'scala' plugins
+apply plugin: 'idea-scala-facet'
+
+repositories{
+  mavenCentral()
+}
+
+dependencies{
+  // 'scalaApi' configuration is automatically added by the plugin.
+  // 'compile' configuration is made to extend the 'scalaApi' configuration.
+  // All libraries in this configuration will be included during compilation.
+  // These libraries will not appear as direct dependencies of the module, but
+  // will be indirectly included in the 'scala-library' library of the Scala-facet.
+  scalaApi 'org.scala-lang:scala-library:2.9.1'
+}
+```
+
+The plugin configuration options described in the [Configuration](#configuration) section,
+have the same format as in the single project setup. Note that the `defined in:` explanation
+field for each of the options specifies where this option may be used:
+
+* `project` - Means this option may only be specified in the root probject's `build.gradle` file
+* `module`  - Means this option may only be specified in a Scala-facet module's `build.gradle` file
+
+Note that if either `scalaCompilerLibName` or `scalaLibraryLibName` is changed, the same change has to
+be applied in all modules's `build.gradle` and root project `build.gradle` files.
 
  [gradle-scala-plugin]: http://gradle.org/docs/current/userguide/scala_plugin.html "Gradle Scala Plugin"
  [gradle-idea-plugin]: http://gradle.org/docs/current/userguide/idea_plugin.html "Gradle IDEA Plugin"
