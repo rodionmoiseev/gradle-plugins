@@ -23,7 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 
 group = 'org.rodion.gradle'
-version = '0.1'
+version = '0.2-SNAPSHOT'
 archivesBaseName = 'idea-scala-plugin'
 
 sourceCompatibility = '1.6'
