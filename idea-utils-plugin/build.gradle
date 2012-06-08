@@ -1,0 +1,84 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+group = 'org.rodion.gradle'
+version = '0.1-SNAPSHOT'
+archivesBaseName = 'idea-utils-plugin'
+
+sourceCompatibility = '1.6'
+[compileJava,compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies{
+  compile gradleApi()
+  groovy localGroovy()
+}
+
+task sourcesJar(type: Jar){
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+artifacts{
+  archives sourcesJar
+}
+
+idea.project.ipr{
+  withXml { provider ->
+    //Setup Git root
+    def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+    mapping.@vcs = 'Git'
+    mapping.@directory = '$PROJECT_DIR$/..'
+
+    //Make sure IDEA sticks Apache 2.0 preamble for each file
+    def comp = provider.node.component.find { it.@name == 'CopyrightManager' }
+    comp.@default = 'Apache 2.0'
+    def copyright = comp.appendNode('copyright')
+    copyright.appendNode('option', [name: 'notice', value: file("${project.projectDir}/license-preamble.txt").text])
+    ['keyword': 'Copyright',
+     'allowReplaceKeyword': '',
+     'myName': 'Apache 2.0',
+     'myLocal': 'true'].each { name, value ->
+        copyright.appendNode('option', ['name': name, 'value': value])
+    }
+  }
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: project.releaseRepoUrl)
+      snapshotRepository(url: project.snapshotRepoUrl)
+      pom.project {
+        inceptionYear '2012'
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+      }
+    }
+  }
+}
