@@ -34,6 +34,18 @@ class IdeaUtilsPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.plugins.apply(IdeaUtilsBasePlugin)
         addRunConfigurationsToProjectIpr(project)
+        addVcsSettingsToProjectIpr(project)
+    }
+
+    def addVcsSettingsToProjectIpr(Project project) {
+        project.idea.project.ipr.withXml { XmlProvider provider ->
+            VcsExtension vcsSettings = project.idea.project.extensions.findByName(IdeaUtilsBasePlugin.VCS_EXTENSION_NAME)
+            if (vcsSettings.vcs != null) {
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = vcsSettings.vcs
+                mapping.@directory = vcsSettings.directory
+            }
+        }
     }
 
     def addRunConfigurationsToProjectIpr(Project project) {

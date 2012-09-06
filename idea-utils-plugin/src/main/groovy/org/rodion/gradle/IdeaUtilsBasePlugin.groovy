@@ -30,10 +30,12 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
  */
 class IdeaUtilsBasePlugin implements Plugin<Project> {
     static final String RUN_CONFIG_EXTENSION_NAME = "runConfigurations"
+    static final String VCS_EXTENSION_NAME = "vcs"
 
     @Override
     void apply(Project project) {
         project.plugins.apply(IdeaPlugin.class)
+        project.idea.project.extensions.create(VCS_EXTENSION_NAME, VcsExtension)
         def runConfigs = project.container(RunConfiguration)
         runConfigs.all { rootProject = project }
         project.idea.project.extensions.add(RUN_CONFIG_EXTENSION_NAME, runConfigs)
@@ -47,65 +49,11 @@ enum RunConfigType {
 
     private final String internalType;
 
-    def RunConfigType(String internalType){
+    def RunConfigType(String internalType) {
         this.internalType = internalType;
     }
 
-    public String getInternalType(){
+    public String getInternalType() {
         return internalType
-    }
-}
-
-class RunConfiguration {
-    //For internal use
-    private final String _configName
-    private Project project = null
-
-    Project module = null
-    boolean isDefault = false
-    String type = RunConfigType.Application.name()
-    String name = null //defaults to run configuration closure name
-    String mainClass = null //required
-    String vmOptions = ""
-    String programArguments = ""
-    private File _workingDirectory = null //set to root project directory by default
-
-    public RunConfiguration(String name){
-        this._configName = name
-        this.name = name
-    }
-
-    def setRootProject(Project project){
-        this.project = project
-    }
-
-    RunConfigType getRunConfigType(){
-        return RunConfigType.values().find { it.name().equals(type)}
-    }
-
-    String getConfigName(){
-        return _configName
-    }
-
-    File getWorkingDirectory(){
-        return getOrModuleOrDefault(_workingDirectory, module?.projectDir, project.projectDir)
-    }
-
-    def setWorkingDirectory(File workingDirectory){
-        _workingDirectory = workingDirectory
-    }
-
-    String getUseModuleClasspath(){
-        return getOrModuleOrDefault(null, module?.name, ""/*only valid for single-module projects*/)
-    }
-
-    private <T> T getOrModuleOrDefault(T value, T moduleValue, T defaultValue){
-        if(null != value){
-            return value
-        }
-        if(null != moduleValue){
-            return moduleValue
-        }
-        return defaultValue
     }
 }
