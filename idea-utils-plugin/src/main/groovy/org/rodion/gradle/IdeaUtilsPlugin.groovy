@@ -35,6 +35,36 @@ class IdeaUtilsPlugin implements Plugin<Project> {
         project.plugins.apply(IdeaUtilsBasePlugin)
         addRunConfigurationsToProjectIpr(project)
         addVcsSettingsToProjectIpr(project)
+        addCopyrightSettingsToProjectIpr(project)
+    }
+
+    def addCopyrightSettingsToProjectIpr(Project project) {
+        project.idea.project.ipr.withXml { XmlProvider provider ->
+            CopyrightExtension ext = project.idea.project.extensions.findByName(IdeaUtilsBasePlugin.COPYRIGHT_EXTENSION_NAME)
+            if (ext.licenseSpecified) {
+                if (ext.name == null) {
+                    throw new IdeaUtilsPluginException("Required 'name' field nas not been specified. Please set "
+                            + "idea.project.${IdeaUtilsBasePlugin.COPYRIGHT_EXTENSION_NAME}.name field to any String value.")
+                }
+                if (ext.license == null) {
+                    throw new IdeaUtilsPluginException("Required 'license' field nas not been specified. Please set "
+                            + "idea.project.${IdeaUtilsBasePlugin.COPYRIGHT_EXTENSION_NAME}.license field to path "
+                            + "to a file contaning license content.")
+                }
+
+                def comp = provider.node.component.find { it.@name == 'CopyrightManager' }
+                comp.@default = ext.name
+                def copyright = comp.appendNode('copyright')
+                copyright.appendNode('option', [name: 'notice', value: ext.license.text])
+                ['keyword': 'Copyright',
+                        'allowReplaceKeyword': '',
+                        'myName': ext.name,
+                        'myLocal': 'true'].each { name, value ->
+                    copyright.appendNode('option', ['name': name, 'value': value])
+                }
+
+            }
+        }
     }
 
     def addVcsSettingsToProjectIpr(Project project) {
