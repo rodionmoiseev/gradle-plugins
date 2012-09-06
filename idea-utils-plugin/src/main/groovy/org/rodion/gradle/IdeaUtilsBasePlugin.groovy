@@ -32,12 +32,14 @@ class IdeaUtilsBasePlugin implements Plugin<Project> {
     static final String RUN_CONFIG_EXTENSION_NAME = "runConfigurations"
     static final String VCS_EXTENSION_NAME = "vcs"
     static final String COPYRIGHT_EXTENSION_NAME = "copyright"
+    static final String MISC_EXTENSION_NAME = "misc"
 
     @Override
     void apply(Project project) {
         project.plugins.apply(IdeaPlugin.class)
         project.idea.project.extensions.create(VCS_EXTENSION_NAME, VcsExtension)
         project.idea.project.extensions.create(COPYRIGHT_EXTENSION_NAME, CopyrightExtension)
+        project.idea.project.extensions.create(MISC_EXTENSION_NAME, MiscExtension)
         def runConfigs = project.container(RunConfiguration)
         runConfigs.all { rootProject = project }
         project.idea.project.extensions.add(RUN_CONFIG_EXTENSION_NAME, runConfigs)

@@ -36,6 +36,18 @@ class IdeaUtilsPlugin implements Plugin<Project> {
         addRunConfigurationsToProjectIpr(project)
         addVcsSettingsToProjectIpr(project)
         addCopyrightSettingsToProjectIpr(project)
+        addMiscellaneousSettingsToProjectIpr(project)
+    }
+
+    def addMiscellaneousSettingsToProjectIpr(Project project) {
+        project.idea.project.ipr.withXml { XmlProvider provider ->
+            MiscExtension ext = project.idea.project.extensions.findByName(IdeaUtilsBasePlugin.MISC_EXTENSION_NAME)
+            if (ext.dynamicClasspath) {
+                def dynamicCp = provider.node.appendNode('component')
+                dynamicCp.@name = 'PropertiesComponent'
+                dynamicCp.appendNode('property', [name: 'dynamic.classpath', value: 'true'])
+            }
+        }
     }
 
     def addCopyrightSettingsToProjectIpr(Project project) {
