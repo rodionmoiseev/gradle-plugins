@@ -1,5 +1,3 @@
-
-
 package org.rodion.gradle;
 
 public class VcsExtension {
