@@ -33,10 +33,40 @@ class IdeaUtilsPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.plugins.apply(IdeaUtilsBasePlugin)
+        addArtifactsToProjectIpr(project)
         addRunConfigurationsToProjectIpr(project)
         addVcsSettingsToProjectIpr(project)
         addCopyrightSettingsToProjectIpr(project)
         addMiscellaneousSettingsToProjectIpr(project)
+    }
+
+    def addArtifactsToProjectIpr(Project project) {
+        project.idea.project.ipr.withXml { XmlProvider provider ->
+            def artifacts = project.idea.project.extensions.findByName(IdeaUtilsBasePlugin.ARTIFACTS_EXTENSION_NAME)
+            if (!artifacts.empty) {
+                def artifactsContainer = provider.node.appendNode("component", [name: 'ArtifactManager'])
+                artifacts.each { ArtifactsExtension artifact ->
+                    if (artifact.outputPath == null) {
+                        throw new IdeaUtilsPluginException("Required 'outputPath' field has not been specified. Please set " +
+                                "idea.project.${IdeaUtilsBasePlugin.ARTIFACTS_EXTENSION_NAME}.outputPath to artifact output directory.")
+                    }
+                    def artifactNode = artifactsContainer.appendNode('artifact', [name: artifact.name, 'build-on-make': String.valueOf(artifact.buildOnMake)])
+                    artifactNode.appendNode('output-path', [:], artifact.outputPath.absolutePath)
+                    def rootNode = artifactNode.appendNode('root', [id: 'root'])
+                    if (!artifact.fileCopy.containsKey('path')) {
+                        throw new IdeaUtilsPluginException("Artifact file-copy directive is a required 'path' option. Please make sure " +
+                                "idea.project.${IdeaUtilsBasePlugin.ARTIFACTS_EXTENSION_NAME}.fileCopy has 'path' option set.")
+                    }
+                    def copyTargetNode = rootNode;
+                    if (artifact.fileCopy.containsKey('dir')) {
+                        artifact.fileCopy['dir'].split("/").each { dirName ->
+                            copyTargetNode = copyTargetNode.appendNode('element', [id: 'directory', name: dirName])
+                        }
+                    }
+                    copyTargetNode.appendNode('element', [id: 'file-copy', path: artifact.fileCopy['path']])
+                }
+            }
+        }
     }
 
     def addMiscellaneousSettingsToProjectIpr(Project project) {
@@ -126,7 +156,13 @@ class IdeaUtilsPlugin implements Plugin<Project> {
         }
         configurationNode.appendNode("module", [name: config.useModuleClasspath])
         configurationNode.appendNode("envs")
-        configurationNode.appendNode("method")
+        def methodNode = configurationNode.appendNode("method")
+        if (!config.buildArtifacts.empty) {
+            def optionNode = methodNode.appendNode("option", [name: "BuildArtifacts", enabled: "true"])
+            config.buildArtifacts.each { artifactName ->
+                optionNode.appendNode("artifact", [name: artifactName])
+            }
+        }
         switch (config.runConfigType) {
             case RunConfigType.Application:
                 configureApplicationOptions(config, configurationNode)

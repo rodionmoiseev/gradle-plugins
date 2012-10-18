@@ -39,6 +39,7 @@ class RunConfiguration {
     String vmOptions = ""
     String programArguments = ""
     private File _workingDirectory = null //set to root project directory by default
+    List<String> buildArtifacts = []
 
     public RunConfiguration(String name) {
         this._configName = name
