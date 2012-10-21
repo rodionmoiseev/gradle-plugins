@@ -11,7 +11,8 @@ to work with your Scala project right away!
 
 ## Installing
 
-Below is the minimum configuration required to setup the `idea-scala` plugin.
+Below is the minimum configuration required to setup the `idea-scala` plugin
+for a single-module setup.
 If you have multi-project setup, please refer to [this section](#multi-project-setup)
 
 To apply the plugin in your project add this to your `build.gradle`.
@@ -24,7 +25,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath group: 'org.rodion.gradle', name: 'idea-scala-plugin', version: '0.1'
+    classpath group: 'org.rodion.gradle', name: 'idea-scala-plugin', version: '0.2'
   }
 }
 
