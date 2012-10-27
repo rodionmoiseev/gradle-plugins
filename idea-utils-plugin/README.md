@@ -90,7 +90,7 @@ idea {
     runConfigurations {
        //Run-configuration configure block.
        //Block name will be used as the default configuration name.
-       //Multiple blocks with unique names maybe defined.
+       //Multiple blocks with unique names may be defined.
        runMyApp {
          //Type of run-configuration to create
          // default: 'Application'
@@ -161,7 +161,7 @@ idea {
     artifacts {
       //Artifact configuration block.
       //Block name will be used as the artifact name.
-      //Multiple blocks with unique names maybe defined.
+      //Multiple blocks with unique names may be defined.
       myArtifact {
         //Directory where artifact content will be copied to
         // default: none (required)
