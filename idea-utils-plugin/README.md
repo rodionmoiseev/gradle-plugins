@@ -1,6 +1,8 @@
 IntelliJ IDEA Utilities Plugin
 ==============================
 
+**Note:** Current latest version is `0.1-SNAPSHOT`. `0.1` will be released shortly.
+
 This plugin is a collection of miscellaneous IntelliJ IDEA project configurations, such as version control settings, copyright settings and so on. 
 
 If you don't see feature here that you would love to have, feel free to post an enhancement request issue.
