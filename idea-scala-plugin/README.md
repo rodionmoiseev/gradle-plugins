@@ -1,15 +1,13 @@
-Gradle Plugins
-==============
-
 IntelliJ IDEA Scala Facet Plugin
---------------------------------
+================================
 
 This plugin works along with the [built-in Scala plugin][gradle-scala-plugin],
 but in addition does a full set up of the Scala Facet, so that you are ready
 to work with your Scala project right away!
 
 
-## Installing
+Installing
+----------
 
 Below is the minimum configuration required to setup the `idea-scala` plugin
 for a single-module setup.
@@ -47,7 +45,8 @@ dependencies{
 compiler and Gradle scala compilation tasks.
 
 
-## Usage
+Usage
+-----
 
 The plugin extends the existing `idea` gradle task of the [built-in IDEA plugin][gradle-idea-plugin].
 
@@ -58,7 +57,8 @@ $ gradle idea
 ```
 
 
-## Configuration
+Configuration
+-------------
 
 Scala Facet settings can be optionally customised. 
 The configuration is designed to resemble the structure of Scala compiler settings GUI in the IntelliJ IDEA.
@@ -154,7 +154,8 @@ ideaScala{
 ```
 
 
-## Plugin Behaviour Details
+Plugin Behaviour Details
+------------------------
 
 Internally, IntelliJ Scala Facet requires two project libraries:
 
@@ -172,7 +173,8 @@ The `scalaApi` configuration is automatically declared by the plugin. The defaul
 `compile` configuration is also set up to extends from `scalaApi` configuration.
 
 
-## Multi Project Setup
+Multi Project Setup
+-------------------
 
 *Since ver 0.2*
 
