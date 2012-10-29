@@ -1,8 +1,6 @@
 IntelliJ IDEA Utilities Plugin
 ==============================
 
-**Note:** Current latest version is `0.1-SNAPSHOT`. `0.1` will be released shortly.
-
 This plugin is a collection of miscellaneous IntelliJ IDEA project configurations, such as version control settings, copyright settings and so on. 
 
 If you don't see feature here that you would love to have, feel free to post an enhancement request issue.
@@ -18,11 +16,11 @@ To apply the plugin in your project add this to your `build.gradle`.
 buildscript {
   repositories{
     maven{
-      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/snapshots"
+      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/releases"
     }
   }
   dependencies {
-    classpath group: 'org.rodion.gradle', name: 'idea-utils-plugin', version: '0.1-SNAPSHOT'
+    classpath group: 'org.rodion.gradle', name: 'idea-utils-plugin', version: '0.1'
   }
 }
 
