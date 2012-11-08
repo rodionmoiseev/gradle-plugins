@@ -9,6 +9,7 @@ class IdeaUtilsBasePlugin implements Plugin<Project> {
     static final String RUN_CONFIG_EXTENSION_NAME = "runConfigurations"
     static final String VCS_EXTENSION_NAME = "vcs"
     static final String COPYRIGHT_EXTENSION_NAME = "copyright"
+    static final String SPELLING_EXTENSION_NAME = "spelling"
     static final String MISC_EXTENSION_NAME = "misc"
 
     @Override
@@ -18,6 +19,7 @@ class IdeaUtilsBasePlugin implements Plugin<Project> {
         project.idea.project.extensions.add(ARTIFACTS_EXTENSION_NAME, artifacts)
         project.idea.project.extensions.create(VCS_EXTENSION_NAME, VcsExtension)
         project.idea.project.extensions.create(COPYRIGHT_EXTENSION_NAME, CopyrightExtension)
+        project.idea.project.extensions.create(SPELLING_EXTENSION_NAME, SpellingExtension)
         project.idea.project.extensions.create(MISC_EXTENSION_NAME, MiscExtension)
         def runConfigs = project.container(RunConfiguration)
         runConfigs.all { rootProject = project }

@@ -30,4 +30,8 @@ public class IdeaUtilsPluginException extends GradleException {
     IdeaUtilsPluginException(String message) {
         super(message)
     }
+
+    IdeaUtilsPluginException(String message, Throwable cause) {
+        super(message, cause)
+    }
 }

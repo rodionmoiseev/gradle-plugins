@@ -37,7 +37,41 @@ class IdeaUtilsPlugin implements Plugin<Project> {
         addRunConfigurationsToProjectIpr(project)
         addVcsSettingsToProjectIpr(project)
         addCopyrightSettingsToProjectIpr(project)
+        addSpellingSettingsToProjectIpr(project)
         addMiscellaneousSettingsToProjectIpr(project)
+    }
+
+    def addSpellingSettingsToProjectIpr(Project project) {
+        project.idea.project.ipr.withXml { XmlProvider provider ->
+            SpellingExtension ext = project.idea.project.extensions.findByName(IdeaUtilsBasePlugin.SPELLING_EXTENSION_NAME)
+
+            /*
+             * Populate 'accepted words' dictionary if present
+             */
+            List<String> words = ext.loadAcceptedWords()
+            if (!words.empty) {
+                def wordsNode = provider.node.appendNode("component", [name: 'ProjectDictionaryState'])
+                        .appendNode("dictionary", [name: ext.userName])
+                        .appendNode("words")
+                words.each { word ->
+                    wordsNode.appendNode("w", [:], word)
+                }
+            }
+
+            /*
+             * Setup 'Dictionaries' tab
+             */
+            if (!ext.dictionaries.empty) {
+                def dictOpts = [name: 'SpellCheckerSettings',
+                        BundledDictionaries: '0',
+                        Folders: String.valueOf(ext.dictionaries.size()),
+                        Dictionaries: '0']
+                ext.dictionaries.eachWithIndex {dir, i ->
+                    dictOpts.put("Folder${i}", String.valueOf(dir))
+                }
+                provider.node.appendNode("component", dictOpts)
+            }
+        }
     }
 
     def addArtifactsToProjectIpr(Project project) {
