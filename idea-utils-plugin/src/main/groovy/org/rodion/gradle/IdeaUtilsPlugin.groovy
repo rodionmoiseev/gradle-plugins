@@ -163,10 +163,11 @@ class IdeaUtilsPlugin implements Plugin<Project> {
             runConfigComp.@name = 'ProjectRunConfigurationManager'
             runConfigs.each { RunConfiguration config ->
                 //Check required fields!
-                if (config.mainClass == null) {
+                if (!config.isDefault && config.mainClass.empty) {
                     throw new IdeaUtilsPluginException("Required 'mainClass' field has not been specified. Please set "
                             + "idea.project.${IdeaUtilsBasePlugin.RUN_CONFIG_EXTENSION_NAME}.${config.configName}.mainClass "
-                            + "to an executable class name, e.g. mainClass = 'com.example.Main'")
+                            + "to an executable class name, e.g. mainClass = 'com.example.Main', or make this "
+                            + "a default configuration with 'isDefault = true'");
                 }
                 def configurationNode = runConfigComp.appendNode('configuration',
                         ["default": config.isDefault,

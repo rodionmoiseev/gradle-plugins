@@ -35,7 +35,7 @@ class RunConfiguration {
     boolean isDefault = false
     String type = RunConfigType.Application.name()
     String name = null //defaults to run configuration closure name
-    String mainClass = null //required
+    String mainClass = "" //required for non-default configurations
     String vmOptions = ""
     String programArguments = ""
     private File _workingDirectory = null //set to root project directory by default
