@@ -40,6 +40,7 @@ class RunConfiguration {
     String programArguments = ""
     private File _workingDirectory = null //set to root project directory by default
     List<String> buildArtifacts = []
+    Map<String, String> env = [:]
 
     public RunConfiguration(String name) {
         this._configName = name

@@ -189,7 +189,8 @@ class IdeaUtilsPlugin implements Plugin<Project> {
             configurationNode.appendNode("option", ["name": name, "value": value])
         }
         configurationNode.appendNode("module", [name: config.useModuleClasspath])
-        configurationNode.appendNode("envs")
+        def envNode = configurationNode.appendNode("envs")
+        config.env.each { envNode.appendNode("env", [name: it.key, value: it.value]) }
         def methodNode = configurationNode.appendNode("method")
         if (!config.buildArtifacts.empty) {
             def optionNode = methodNode.appendNode("option", [name: "BuildArtifacts", enabled: "true"])
