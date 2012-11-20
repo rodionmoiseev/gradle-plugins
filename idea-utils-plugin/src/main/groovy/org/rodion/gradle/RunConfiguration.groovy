@@ -41,6 +41,7 @@ class RunConfiguration {
     private File _workingDirectory = null //set to root project directory by default
     List<String> buildArtifacts = []
     Map<String, String> env = [:]
+    private List<LogConfiguration> _logs = []
 
     public RunConfiguration(String name) {
         this._configName = name
@@ -79,5 +80,69 @@ class RunConfiguration {
             return moduleValue
         }
         return defaultValue
+    }
+
+    def getLogs() {
+        return _logs
+    }
+
+    def logs(Closure logsConfig) {
+        logsConfig.delegate = this
+        logsConfig()
+    }
+
+    def log(String name, Closure config) {
+        def logConf = new LogConfiguration(name)
+        _logs << logConf
+        config.delegate = logConf
+        config.resolveStrategy = Closure.DELEGATE_ONLY
+        config()
+    }
+
+    @Override
+    public String toString() {
+        return "RunConfiguration{" +
+                "module=" + module +
+                ", isDefault=" + isDefault +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", mainClass='" + mainClass + '\'' +
+                ", vmOptions='" + vmOptions + '\'' +
+                ", programArguments='" + programArguments + '\'' +
+                ", buildArtifacts=" + buildArtifacts +
+                ", env=" + env +
+                ", workingDirectory=" + _workingDirectory +
+                ", logs=" + logs +
+                '}';
+    }
+
+    static class LogConfiguration {
+        //for internal use
+        private String _logConfigName = null
+        String alias = null //defaults to closure name
+        boolean isActive = true
+        boolean skipContent = true
+        boolean usePattern = false
+        String path = null //required
+
+        LogConfiguration(String name) {
+            this._logConfigName = name
+            this.alias = name
+        }
+
+        String getLogConfigName() {
+            return _logConfigName
+        }
+
+        @Override
+        public String toString() {
+            return "LogConfiguration{" +
+                    "alias='" + alias + '\'' +
+                    ", isActive=" + isActive +
+                    ", skipContent=" + skipContent +
+                    ", usePattern=" + usePattern +
+                    ", path='" + path + '\'' +
+                    '}';
+        }
     }
 }

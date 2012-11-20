@@ -23,6 +23,7 @@ package org.rodion.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.XmlProvider
+import org.rodion.gradle.RunConfiguration.LogConfiguration
 
 /**
  * <p>Created: 6/7/12 5:00 PM</p>
@@ -175,6 +176,9 @@ class IdeaUtilsPlugin implements Plugin<Project> {
                                 type: config.getRunConfigType().internalType,
                                 factoryName: config.getRunConfigType().name()])
                 configureOptions(config, configurationNode)
+                config.logs.each {
+                    configureLogs(it, configurationNode)
+                }
             }
         }
     }
@@ -209,6 +213,14 @@ class IdeaUtilsPlugin implements Plugin<Project> {
             default:
                 throw new IdeaUtilsPluginException("Unexpected run configuration type: " + config.runConfigType)
         }
+    }
+
+    def configureLogs(LogConfiguration logConf, Node configurationNode) {
+        configurationNode.appendNode('log_file', [path: logConf.path,
+                checked: logConf.isActive,
+                skipped: logConf.skipContent,
+                show_all: logConf.usePattern,
+                alias: logConf.alias])
     }
 
     def configureApplicationOptions(RunConfiguration config, Node configurationNode) {
