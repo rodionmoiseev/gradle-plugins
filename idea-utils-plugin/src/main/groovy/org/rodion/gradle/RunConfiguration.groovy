@@ -35,6 +35,7 @@ class RunConfiguration {
     boolean isDefault = false
     String type = RunConfigType.Application.name()
     String name = null //defaults to run configuration closure name
+    String folderName = null
     String mainClass = "" //required for non-default configurations
     String vmOptions = ""
     String programArguments = ""
@@ -53,7 +54,7 @@ class RunConfiguration {
     }
 
     RunConfigType getRunConfigType() {
-        return RunConfigType.values().find { it.name().equals(type)}
+        return RunConfigType.values().find { it.name().equals(type) }
     }
 
     String getConfigName() {

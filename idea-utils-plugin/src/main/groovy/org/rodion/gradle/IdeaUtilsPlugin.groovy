@@ -67,7 +67,7 @@ class IdeaUtilsPlugin implements Plugin<Project> {
                         BundledDictionaries: '0',
                         Folders: String.valueOf(ext.dictionaries.size()),
                         Dictionaries: '0']
-                ext.dictionaries.eachWithIndex {dir, i ->
+                ext.dictionaries.eachWithIndex { dir, i ->
                     dictOpts.put("Folder${i}", String.valueOf(dir))
                 }
                 provider.node.appendNode("component", dictOpts)
@@ -170,11 +170,15 @@ class IdeaUtilsPlugin implements Plugin<Project> {
                             + "to an executable class name, e.g. mainClass = 'com.example.Main', or make this "
                             + "a default configuration with 'isDefault = true'");
                 }
-                def configurationNode = runConfigComp.appendNode('configuration',
-                        ["default": config.isDefault,
-                                name: config.name,
-                                type: config.getRunConfigType().internalType,
-                                factoryName: config.getRunConfigType().name()])
+                def runOpts = ["default": config.isDefault,
+                        name: config.name,
+                        type: config.getRunConfigType().internalType,
+                        factoryName: config.getRunConfigType().name()]
+                def folderName = config.folderName?.trim()
+                if (folderName != null && folderName.size() > 0) {
+                    runOpts.put("folderName", folderName)
+                }
+                def configurationNode = runConfigComp.appendNode('configuration', runOpts)
                 configureOptions(config, configurationNode)
                 config.logs.each {
                     configureLogs(it, configurationNode)
