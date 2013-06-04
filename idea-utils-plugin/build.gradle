@@ -21,17 +21,23 @@
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
-group = 'org.rodion.gradle'
+group = 'com.github.rodionmoiseev.gradle.plugins'
 version = '0.2-SNAPSHOT'
-archivesBaseName = 'idea-utils-plugin'
+archivesBaseName = 'idea-utils'
 
 sourceCompatibility = '1.6'
-[compileJava,compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 dependencies{
   compile gradleApi()
   groovy localGroovy()
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc){
+  classifier = 'javadoc'
+  from 'build/docs/javadoc'
 }
 
 task sourcesJar(type: Jar){
@@ -40,42 +46,75 @@ task sourcesJar(type: Jar){
 }
 
 artifacts{
+  archives jar
+  archives javadocJar
   archives sourcesJar
 }
 
+signing{
+  sign configurations.archives
+}
+
 idea.project.ipr{
-  withXml { provider ->
+  withXml{ provider ->
     //Setup Git root
-    def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+    def mapping = provider.node.component.find{ it.@name == 'VcsDirectoryMappings' }.mapping
     mapping.@vcs = 'Git'
     mapping.@directory = '$PROJECT_DIR$/..'
 
     //Make sure IDEA sticks Apache 2.0 preamble for each file
-    def comp = provider.node.component.find { it.@name == 'CopyrightManager' }
+    def comp = provider.node.component.find{ it.@name == 'CopyrightManager' }
     comp.@default = 'Apache 2.0'
     def copyright = comp.appendNode('copyright')
     copyright.appendNode('option', [name: 'notice', value: file("${project.projectDir}/license-preamble.txt").text])
     ['keyword': 'Copyright',
-     'allowReplaceKeyword': '',
-     'myName': 'Apache 2.0',
-     'myLocal': 'true'].each { name, value ->
-        copyright.appendNode('option', ['name': name, 'value': value])
+            'allowReplaceKeyword': '',
+            'myName': 'Apache 2.0',
+            'myLocal': 'true'].each{ name, value ->
+      copyright.appendNode('option', ['name': name, 'value': value])
     }
   }
 }
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      repository(url: project.releaseRepoUrl)
-      snapshotRepository(url: project.snapshotRepoUrl)
-      pom.project {
+uploadArchives{
+  repositories{
+    mavenDeployer{
+      repository(url: project.releaseRepoUrl){
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      snapshotRepository(url: project.snapshotRepoUrl){
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      pom.project{
+        artifactId = project.archivesBaseName
+        name 'Gradle IntelliJ IDEA Utilities Plugin'
         inceptionYear '2012'
-        licenses {
-          license {
+        packaging 'jar'
+        description 'A collection of miscellaneous IntelliJ IDEA project ' +
+                'configurations, such as version control settings, copyright settings, etc.'
+        url 'https://github.com/rodionmoiseev/gradle-plugins/tree/master/idea-utils-plugin'
+
+        scm{
+          url 'scm:git@github.com:rodionmoiseev/gradle-plugins.git'
+          connection 'scm:git@github.com:rodionmoiseev/gradle-plugins.git'
+          developerConnection 'scm:git@github.com:rodionmoiseev/gradle-plugins.git'
+        }
+
+        licenses{
+          license{
             name 'The Apache Software License, Version 2.0'
             url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
             distribution 'repo'
+          }
+        }
+
+        developers{
+          developer{
+            id 'rodionmoiseev'
+            name 'Rodion Moiseev'
+            email 'rodion.moiseev+github@gmail.com'
           }
         }
       }
