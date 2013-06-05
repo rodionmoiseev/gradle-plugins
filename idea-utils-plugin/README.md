@@ -66,9 +66,40 @@ idea {
       // in the special 'master' folder set directory to '$PROJECT_DIR$/..'
       directory = '$PROJECT_DIR$'
     }
+
+    /*
+     * Project Settings / Spelling configuration options
+     */
+    spelling {
+      //Name used for the "Accepted Words" (see "Accepted Words" tab under "Spelling" options)
+      //embedded dictionary. Must match 'user.name' property in IntelliJ, otherwise dictionary
+      //will not be recognised. Usually will work with the default value.
+      // default: `System.getProperty("user.name")`
+      // defined in: project
+      userName = 'rodion'
+
+      //Sources of accepted words (words to be recognised as correctly spelled).
+      //Accepts a list of strings, a File, or a list of Files.
+      //When files are specified, their contents are loaded and
+      // exploded into a flat list, with duplicates removed.
+      // default: []
+      // defined in: project
+      acceptedWords = []
+
+      //A list of directories to be added to the "Dictionaries" tab. These directories will be
+      //scanned for dictionary files.
+      //Tip: you can use $PROJECT_DIR$ placeholder that evaluates to you project root directory.
+      // default: []
+      // defined in: project
+      dictionaries = []
+
+      //Charset to use when loading accepted words from files
+      // default: 'UTF-8'
+      charset = 'UTF-8'
+    }
     
     /*
-     * Copyright Plugin (built-in) Confgiuration
+     * Copyright Plugin (built-in) Configuration
      */
     copyright {
       //License configuration name
@@ -100,10 +131,16 @@ idea {
          // default: 'runMyApp' (defaults to configuration block name)
          // defined in: project
          name = 'Run my application'
+
+         //Name of the folder to place this run configuration under.
+         //Folders will be created automatically as needed.
+         // default: null (root folder)
+         // defined in: project
+         folderName = 'myFolder'
          
          //FQDN of the main class to execute
-         // default: none (required)
-         mainClass = 'com.examle.main.Application'
+         // default: none (required, unless 'isDefault' is 'true')
+         mainClass = 'com.example.main.Application'
          
          //Options to pass to Java VM
          // default: ''
@@ -125,6 +162,11 @@ idea {
          //  Parent project directory for single-project setup)
          // defined in: project
          workingDirectory = project(':sub-project').projectDir
+
+         //Environment variables to pass to the executing process (Groovy map)
+         // default: [:]
+         // defined in: project
+         env = [:]
          
          //When set to 'true', this configuration will appear under 'Defaults' tree in the
          // 'Run/Debug Configurations' screen, and will act as default settings for other configurations
@@ -139,6 +181,41 @@ idea {
          // default: []
          // defined in: project
          buildArtifacts = ['myArtifact']
+
+         /*
+          * Configures output logs for the Run Configuration (See "Logs" tab)
+          *  defined in: project
+          */
+         logs {
+           //Log configuration block.
+           //Multiple blocks with unique names may be defined.
+           log("myApp.log") {
+             //Absolute path to the log file to watch.
+             //Tip: you can use $PROJECT_DIR$ placeholder that evaluates to you
+             //project root directory.
+             // default: none (required)
+             path = '$PROJECT_DIR$/myApp/logs/myApp.log'
+
+             //Alias to use in the GUI
+             // default: same as block name ("myApp.log" in this example)
+             alias = 'myApp log'
+
+             //If 'false' log watching will be disabled, and no tab for this log
+             //will appear. Corresponds to the 'Is Active' column in the GUI.
+             // default: true
+             isActive = true
+
+             //When 'true', IDEA will attempt to hide old log content from previous
+             //application run.
+             // default: true
+             skipContent = true
+
+             //When 'true', the 'path' parameter will be interpreted as a wildcard, where
+             //all matching log files will be added to the watch.
+             // default: false
+             usePattern = false
+           }
+         }
        }
     }
     
