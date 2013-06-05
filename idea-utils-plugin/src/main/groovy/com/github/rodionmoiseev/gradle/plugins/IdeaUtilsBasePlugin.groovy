@@ -1,4 +1,4 @@
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

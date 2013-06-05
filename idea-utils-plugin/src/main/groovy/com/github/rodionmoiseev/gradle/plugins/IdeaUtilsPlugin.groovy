@@ -18,12 +18,12 @@
  *
  */
 
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.XmlProvider
-import org.rodion.gradle.RunConfiguration.LogConfiguration
+import com.github.rodionmoiseev.gradle.plugins.RunConfiguration.LogConfiguration
 
 /**
  * <p>Created: 6/7/12 5:00 PM</p>

@@ -1,4 +1,4 @@
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins
 
 class ArtifactsExtension {
     final String name;

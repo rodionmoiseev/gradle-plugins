@@ -15,12 +15,10 @@ To apply the plugin in your project add this to your `build.gradle`.
 ```groovy
 buildscript {
   repositories{
-    maven{
-      url "https://raw.github.com/rodionmoiseev/maven-repo/master/repo/releases"
-    }
+    mavenCentral()
   }
   dependencies {
-    classpath group: 'org.rodion.gradle', name: 'idea-utils-plugin', version: '0.1'
+    classpath group: 'com.github.rodionmoiseev.gradle.plugins', name: 'idea-utils', version: '0.2'
   }
 }
 

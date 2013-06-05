@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins
 
 /**
  * <p>Created: 9/6/12 11:31 AM</p>

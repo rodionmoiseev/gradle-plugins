@@ -1,5 +1,5 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one
+ * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -15,23 +15,19 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
-package org.rodion.gradle
-
-import org.gradle.api.GradleException
+package com.github.rodionmoiseev.gradle.plugins
 
 /**
- * <p>Created: 6/7/12 5:35 PM</p>
+ * <p>Created: 9/6/12 10:25 AM</p>
  * @author rodion
  */
-public class IdeaUtilsPluginException extends GradleException {
-    IdeaUtilsPluginException(String message) {
-        super(message)
-    }
+public class CopyrightExtension {
+    String name = null //required
+    File license = null //required
 
-    IdeaUtilsPluginException(String message, Throwable cause) {
-        super(message, cause)
+    boolean isLicenseSpecified() {
+        return name != null || license != null
     }
 }
