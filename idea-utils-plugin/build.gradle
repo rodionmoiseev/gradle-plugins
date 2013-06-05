@@ -79,6 +79,10 @@ idea.project.ipr{
 uploadArchives{
   repositories{
     mavenDeployer{
+      beforeDeployment{ deployment ->
+        signing.signPom(deployment)
+      }
+
       repository(url: project.releaseRepoUrl){
         authentication(userName: sonatypeUsername, password: sonatypePassword)
       }
