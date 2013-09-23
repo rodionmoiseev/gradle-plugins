@@ -23,6 +23,7 @@ package org.rodion.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.scala.ScalaPlugin
+import org.gradle.plugins.ide.idea.IdeaPlugin
 
 /**
  * A convenience plugin for single module projects
@@ -30,12 +31,23 @@ import org.gradle.api.plugins.scala.ScalaPlugin
  */
 class IdeaScalaPlugin implements Plugin<Project> {
 
-    @Override
-    void apply(Project project) {
-        //Scala plugin needs to be initialised before idea-scala-project plugin
-        //otherwise will fail when trying to register 'scalaTools' configuration
-        project.plugins.apply(ScalaPlugin.class)
-        project.plugins.apply(IdeaScalaFacetPlugin.class)
-        project.plugins.apply(IdeaScalaProjectPlugin.class)
+  @Override
+  void apply(Project project) {
+    //all projects depend on idea plugin
+    project.plugins.apply(IdeaPlugin.class)
+
+    if (Utils.isRootProject(project)) {
+      //Root project does not depend on scala plugin
+      //If root project also enables scala-facet, 
+      //scala plugin has to be applied manually.
+      project.plugins.apply(IdeaScalaProjectPlugin.class)
+    } else {
+      println("DEBUG: applying scala ($project.name)")
+      project.plugins.apply(ScalaPlugin.class)
     }
+
+    //Scala-facet plugin will internally determine if it
+    //is applied, depending on the idea.module.scala.enabled flag 
+    project.plugins.apply(IdeaScalaFacetPlugin.class)
+  }
 }

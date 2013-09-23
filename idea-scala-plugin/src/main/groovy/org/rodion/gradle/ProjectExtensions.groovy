@@ -20,14 +20,28 @@
 
 package org.rodion.gradle
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+public final class ProjectExtensions {
 
-/**
- * @author rodion
- */
-class IdeaScalaBasePlugin implements Plugin<Project> {
-  @Override
-  void apply(Project project) {
+  static class Scala {
+    boolean typeAwareHighlighting = true
+  }
+  static class ScalaCompiler {
+    boolean scalacBefore = true
+  }
+  static class ScalaFsc {
+    String compilerLibrary = null
+    int maxHeapSize = 512
+    String vmParameters = '-Xms128m -Xss1m -server'
+    int idleTimeout = 0
+    String serverOptions = ''
+  }
+  static class ScalaFscServer {
+    boolean enable = false
+    String host = ''
+    int port = -1
+    String sharedDirectory = ''
   }
 }
+
+
+

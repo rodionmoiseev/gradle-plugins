@@ -20,14 +20,13 @@
 
 package org.rodion.gradle
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-
-/**
- * @author rodion
- */
-class IdeaScalaBasePlugin implements Plugin<Project> {
-  @Override
-  void apply(Project project) {
+class ModuleExtensions {
+  static class Scala {
+    boolean enable = true
+  }
+  static class ScalaCompiler {
+    int maxHeapSize = 512
+    String vmParameters = '-Xss1m -server'
+    boolean useFSC = false
   }
 }

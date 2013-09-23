@@ -27,7 +27,7 @@ import org.gradle.api.GradleException
  * @author rodion
  */
 class IdeaScalaPluginException extends GradleException {
-    IdeaScalaPluginException(String message) {
-        super(message)
-    }
+  IdeaScalaPluginException(String message) {
+    super(message)
+  }
 }
