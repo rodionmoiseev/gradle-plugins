@@ -18,30 +18,16 @@
  *
  */
 
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins.ideascala
 
-public final class ProjectExtensions {
+import org.gradle.api.GradleException
 
-  static class Scala {
-    boolean typeAwareHighlighting = true
-  }
-  static class ScalaCompiler {
-    boolean scalacBefore = true
-  }
-  static class ScalaFsc {
-    String compilerLibrary = null
-    int maxHeapSize = 512
-    String vmParameters = '-Xms128m -Xss1m -server'
-    int idleTimeout = 0
-    String serverOptions = ''
-  }
-  static class ScalaFscServer {
-    boolean enable = false
-    String host = ''
-    int port = -1
-    String sharedDirectory = ''
+/**
+ *
+ * @author rodion
+ */
+class IdeaScalaPluginException extends GradleException {
+  IdeaScalaPluginException(String message) {
+    super(message)
   }
 }
-
-
-

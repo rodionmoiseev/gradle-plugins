@@ -18,7 +18,7 @@
  *
  */
 
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins.ideascala
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

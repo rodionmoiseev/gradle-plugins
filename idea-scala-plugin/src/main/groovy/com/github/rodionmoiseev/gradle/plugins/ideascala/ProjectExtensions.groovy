@@ -18,15 +18,30 @@
  *
  */
 
-package org.rodion.gradle
+package com.github.rodionmoiseev.gradle.plugins.ideascala
 
-class ModuleExtensions {
+public final class ProjectExtensions {
+
   static class Scala {
-    boolean enable = true
+    boolean typeAwareHighlighting = true
   }
   static class ScalaCompiler {
+    boolean scalacBefore = true
+  }
+  static class ScalaFsc {
+    String compilerLibrary = null
     int maxHeapSize = 512
-    String vmParameters = '-Xss1m -server'
-    boolean useFSC = false
+    String vmParameters = '-Xms128m -Xss1m -server'
+    int idleTimeout = 0
+    String serverOptions = ''
+  }
+  static class ScalaFscServer {
+    boolean enable = false
+    String host = ''
+    int port = -1
+    String sharedDirectory = ''
   }
 }
+
+
+
