@@ -34,6 +34,7 @@ class RunConfiguration {
     Project module = null
     boolean isDefault = false
     String type = RunConfigType.Application.name()
+    String factoryName = null //defaults to RunConfigType#internalType
     String name = null //defaults to run configuration closure name
     String folderName = null
     String mainClass = "" //required for non-default configurations
@@ -43,6 +44,11 @@ class RunConfiguration {
     List<String> buildArtifacts = []
     Map<String, String> env = [:]
     private List<LogConfiguration> _logs = []
+
+    /** Custom attributes to be added to the root "configuration" element */
+    Map<String,String> customAttributes = [:]
+    /** Custom elements to be added in NodeBuilder format  */
+    Closure customElements = {}
 
     public RunConfiguration(String name) {
         this._configName = name

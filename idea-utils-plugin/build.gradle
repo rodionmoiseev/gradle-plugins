@@ -32,7 +32,7 @@ sourceCompatibility = '1.6'
 
 dependencies{
   compile gradleApi()
-  groovy localGroovy()
+  compile localGroovy()
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc){

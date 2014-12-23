@@ -163,27 +163,49 @@ class IdeaUtilsPlugin implements Plugin<Project> {
             def runConfigComp = provider.node.appendNode('component')
             runConfigComp.@name = 'ProjectRunConfigurationManager'
             runConfigs.each { RunConfiguration config ->
+                RunConfigType configType = config.runConfigType
                 //Check required fields!
+                if(config.type == null){
+                    throw new IdeaUtilsPluginException("'type' field is required, but was null.")
+                }
+                if(configType == null && config.factoryName == null){
+                    throw new IdeaUtilsPluginException("When using a custom type '${config.type}', 'factoryName' " +
+                            "field must be explicitly set.")
+                }
                 if (!config.isDefault && config.mainClass.empty) {
                     throw new IdeaUtilsPluginException("Required 'mainClass' field has not been specified. Please set "
                             + "idea.project.${IdeaUtilsBasePlugin.RUN_CONFIG_EXTENSION_NAME}.${config.configName}.mainClass "
                             + "to an executable class name, e.g. mainClass = 'com.example.Main', or make this "
                             + "a default configuration with 'isDefault = true'");
                 }
-                def runOpts = ["default": config.isDefault,
-                        name: config.name,
-                        type: config.getRunConfigType().internalType,
-                        factoryName: config.getRunConfigType().name()]
+                def type = configType == null ? config.type : configType.internalType
+                def factoryName = configType == null ? config.factoryName : configType.name()
+                def runOpts = ["default"  : config.isDefault,
+                               name       : config.name,
+                               type       : type,
+                               factoryName: factoryName]
                 def folderName = config.folderName?.trim()
                 if (folderName != null && folderName.size() > 0) {
                     runOpts.put("folderName", folderName)
                 }
+                //Custom attributes take preference
+                runOpts.putAll(config.customAttributes)
                 def configurationNode = runConfigComp.appendNode('configuration', runOpts)
                 configureOptions(config, configurationNode)
                 config.logs.each {
                     configureLogs(it, configurationNode)
                 }
+                //Add any custom elements
+                addCustomElements(configurationNode, config)
             }
+        }
+    }
+
+    def addCustomElements(Node configurationNode, RunConfiguration config){
+        def nodeBuilder = new NodeBuilder()
+        def node = nodeBuilder.invokeMethod("root", config.customElements)
+        node.children().each {child ->
+            configurationNode.append(child)
         }
     }
 
@@ -207,15 +229,18 @@ class IdeaUtilsPlugin implements Plugin<Project> {
                 optionNode.appendNode("artifact", [name: artifactName])
             }
         }
-        switch (config.runConfigType) {
-            case RunConfigType.Application:
-                configureApplicationOptions(config, configurationNode)
-                break;
-            case RunConfigType.JUnit:
-                configureJUnitOptions(config, configurationNode)
-                break;
-            default:
-                throw new IdeaUtilsPluginException("Unexpected run configuration type: " + config.runConfigType)
+        def runConfigType = config.runConfigType
+        if(null != runConfigType){
+            switch(runConfigType){
+                case RunConfigType.Application:
+                    configureApplicationOptions(config, configurationNode)
+                    break;
+                case RunConfigType.JUnit:
+                    configureJUnitOptions(config, configurationNode)
+                    break;
+                default:
+                    throw new IdeaUtilsPluginException("Unexpected run configuration type: " + config.runConfigType)
+            }
         }
     }
 
