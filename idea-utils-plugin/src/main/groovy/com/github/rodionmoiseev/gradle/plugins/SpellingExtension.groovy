@@ -36,15 +36,15 @@ public class SpellingExtension {
         Set<String> orderedWordSet = new LinkedHashSet<String>()
         if (acceptedWords instanceof List) {
             for (word in acceptedWords) {
-                loadAcceptedWords(word, orderedWordSet)
+                doLoadAcceptedWords(word, orderedWordSet)
             }
         } else {
-            loadAcceptedWords(acceptedWords, orderedWordSet)
+            doLoadAcceptedWords(acceptedWords, orderedWordSet)
         }
         return new ArrayList<String>(orderedWordSet)
     }
 
-    private void loadAcceptedWords(Object obj, Set<String> res) {
+    private void doLoadAcceptedWords(Object obj, Set<String> res) {
         if (obj instanceof File) {
             loadAcceptedWordsFromFile((File) obj, res)
         } else {
