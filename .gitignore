@@ -18,9 +18,15 @@
 *.iml
 *.iws
 out/
+.idea/
 
 #
 # Gradle temporary files
 #
 .gradle
 build/
+
+#
+# Mac stuff
+#
+.DS_Store
