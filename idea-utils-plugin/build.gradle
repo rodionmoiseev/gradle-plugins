@@ -24,7 +24,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'com.github.rodionmoiseev.gradle.plugins'
-version = '0.2'
+version = '0.3-rc2'
 archivesBaseName = 'idea-utils'
 
 sourceCompatibility = '1.6'
