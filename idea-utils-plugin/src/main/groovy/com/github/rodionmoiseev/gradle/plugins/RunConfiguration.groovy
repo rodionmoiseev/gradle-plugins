@@ -79,6 +79,10 @@ class RunConfiguration {
         return getOrModuleOrDefault(null, module?.name, ""/*only valid for single-module projects*/)
     }
 
+    boolean isRequiresMainClass(){
+        return !(isDefault || runConfigType == null);
+    }
+
     private <T> T getOrModuleOrDefault(T value, T moduleValue, T defaultValue) {
         if (null != value) {
             return value
