@@ -29,7 +29,7 @@ class IdeaUtilsBasePlugin implements Plugin<Project> {
 
 enum RunConfigType {
     Application("Application"),
-    JUnit("Junit"),
+    JUnit("JUnit"),
     Specs("SpecsRunConfiguration");
 
     private final String internalType;
