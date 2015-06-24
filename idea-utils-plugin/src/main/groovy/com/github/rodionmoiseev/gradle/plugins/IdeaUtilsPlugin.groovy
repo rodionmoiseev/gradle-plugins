@@ -262,7 +262,7 @@ class IdeaUtilsPlugin implements Plugin<Project> {
         ["TEST_OBJECT": "class"].each { name, value ->
             configurationNode.appendNode("option", ["name": name, "value": value])
         }
-        configurationNode.appendNode("option").appendNode("value", [defaultName: "moduleWithDependencies"])
+        configurationNode.appendNode("option", ["name": "TEST_SEARCH_SCOPE"]).appendNode("value", [defaultName: "moduleWithDependencies"])
         configurationNode.appendNode("patterns")
     }
 }
